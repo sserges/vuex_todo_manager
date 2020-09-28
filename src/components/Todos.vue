@@ -2,12 +2,9 @@
   <div>
     <h3>Todos</h3>
     <div class="todos">
-      <div
-        v-for="todo in allTodos"
-        :key="todo.id"
-        class="todo"
-      >
+      <div v-for="todo in allTodos" :key="todo.id" class="todo">
         {{ todo.title }}
+        <i @click="removeTodo(todo.id)" class="fas fa-trash-alt"></i>
       </div>
     </div>
   </div>
@@ -19,12 +16,17 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Todos",
   methods: {
-    ...mapActions(['fetchTodos'])
+    ...mapActions(["fetchTodos", "deleteTodo"]),
+    removeTodo(id) {
+      if (confirm("Do you really want to delete this item?")) {
+        this.deleteTodo(id);
+      }
+    },
   },
   computed: mapGetters(["allTodos"]),
   created() {
     this.fetchTodos();
-  }
+  },
 };
 </script>
 
@@ -45,7 +47,7 @@ export default {
   cursor: pointer;
 }
 
-/* i {
+i {
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -53,7 +55,7 @@ export default {
   cursor: pointer;
 }
 
-.legend {
+/*.legend {
   display: flex;
   justify-content: space-around;
   margin-bottom: 1rem;
